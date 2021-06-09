@@ -14,14 +14,6 @@ def readDataset(filename: str) -> pd.DataFrame :
     # Note found there was no missing values so no cleaning required
     # no way to drop bad values while reading, so performance slow down
     # if needed though just add: df.dropna(inplace=true) 
-    
-def readDataset(filename: str) -> pd.DataFrame :
-    df = pd.read_csv(filename) 
-    # Note found there was no missing values so no cleaning required
-    # no way to drop bad values while reading, so performance slow down
-    # if needed though just add: df.dropna(inplace=true)
-    return df
-    
 
 def getMinimumTemperatureStation(df: pd.DataFrame) -> object:
     # Grabs index of row with lowest value in each column
@@ -33,7 +25,7 @@ def getMinimumTemperatureStation(df: pd.DataFrame) -> object:
     # Format return value
     stationInfo = {
         'station_id' : int(row['station_id']),
-        'temperature_c': row['temperature_c']
+        'date': row['date']
     }
     return stationInfo
 
@@ -62,7 +54,7 @@ def getStationWithMostFluctuationTimeBound(df: pd.DataFrame, startTime: float, e
 
 def output(lowestTempStation: object, stationWithMostFluctuation: int, stationWithMostFluctuationTimeBound: int,
            startTime: float, endTime: float) -> None:
-    lowestStationString = "The station with the lowest temperature recording was {0}, with a reading of {1} Celcius\n".format(lowestTempStation["station_id"],lowestTempStation["temperature_c"])
+    lowestStationString = "The station with the lowest temperature recording was {0} at {1}\n".format(lowestTempStation["station_id"],round(lowestTempStation["date"], 3))
     stationWithMostFluctuationString = "Station {0} had the most temperature fluctuation given all the readings\n".format(stationWithMostFluctuation)
     stationTimeBoundFluctuationString = "Station {0} with the most temperature fluctuation between {1} and {2}".format(stationWithMostFluctuationTimeBound, startTime, endTime)
 
@@ -78,7 +70,7 @@ def tests() :
 
     # Part 1
     lowestTempStationObj = getMinimumTemperatureStation(testDf)
-    assert(lowestTempStationObj['temperature_c'] == 5.4)
+    assert(round(lowestTempStationObj['date'],3) == 2000.542)
     assert(lowestTempStationObj['station_id'] == 68)
 
     # Part 2
@@ -97,7 +89,7 @@ def tests() :
 
 def main() :
    
-    # tests()
+    tests()
     
     # Read raw data
     filename = 'data/data.csv.zip'
