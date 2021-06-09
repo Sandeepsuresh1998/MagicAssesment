@@ -8,9 +8,9 @@ so it was nice to revisist some of the tech.
   readWeather.py using python3.7 So should be able to just run it with the given requirements with: python3 readWeather.py. Tests are commened out.
 
 ## General Thoughts
-  I knew my biggest bottleneckwas reading in the data from the zip file. As a result, I only read it once and stored it in the dataframe. 
+  I knew my biggest bottleneck was reading in the data from the zip file. As a result, I only read it once and stored it in the dataframe. 
   I wanted to modularize the code as much as possible for readabiltly purposes and to limit rewriting of code. As seen in part 3, part 3 
-  can be broken down to a part 2 problem after you filter out readings that are not in the time bounds. Similarly, if part 1 was also asked
+  can be broken down to a part 2 problem, after you filter out readings that are not in the time bounds. Similarly, if part 1 was also asked
   to have a time bound constraint, I could filter out the dates similarly and pass that dataframe into getMinimumTemperatureStation()
 
 ## Part 1 getMinimumTemperatureStation
@@ -33,9 +33,10 @@ so it was nice to revisist some of the tech.
 ## Testing
   This is the area that if I had more time I would rigorously test more. Right now, my code makes a lot of assumptions that the data that I read 
   will be correct and there are no 'gotchas'. For example, what if a row had a temperature reading that was actually a string? Or what if there
-  was any missing data in any column (note solution to this is trivial and is talked about in my code, just left out for performance reasons)
+  was any missing data in any column (note solution to this is trivial and is talked about in my code, just left out for performance reasons). What
+  also happens if the data is not sorted by time does the calculations around fluctuation change?
   
 ## Final Thoughts 
-  To be honest, pandas this kind of data engineering work is not my forte. My experience with working with these technologies was only during my 
-  time as a Machine Learning Engineer at Nordstrom. My python experiences are a lot more oriented around creating clients to test services, and 
-  making and handling api calls. Regardless, I hope my work here was enough to get me to the next round, and if not thank you for reading this far :)
+  To be honest, my pandas skills is not my forte. My experience with working with these technologies was only during my time as a Machine Learning
+  Engineer at Nordstrom. My python experiences are a lot more oriented around creating clients to test services, and making and handling api calls. 
+  Regardless, I hope my work here was enough to get me to the next round, and if not thank you for reading this far :)
