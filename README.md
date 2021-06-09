@@ -5,7 +5,8 @@ so it was nice to revisist some of the tech.
 
 # Important Notes about Running
   I put all of the libraries I needed in a requirements.txt, didn't want to upload my entire virtual environment. All the code is run in
-  readWeather.py using python3.7 So should be able to just run it with the given requirements with: python3 readWeather.py. Tests are commened out.
+  readWeather.py using python3.7. So should be able to just run it with the given requirements with: python3 readWeather.py, after repo 
+  is cloned. Tests are commented out.
 
 ## General Thoughts
   I knew my biggest bottleneck was reading in the data from the zip file. As a result, I only read it once and stored it in the dataframe. 
@@ -18,7 +19,7 @@ so it was nice to revisist some of the tech.
   column, so I used that then created an object that stores the station id and the corresponding lowest temperature.
 
 ## Part 2 getStationWithMostFluctuation
-  This was a little trickier, as originally I thought that "most fluctuation" would also mean "highest standard deviation." In an earlier
+  This part was a little trickier, as originally I thought that "most fluctuation" would also mean "highest standard deviation." In an earlier
   version of my code (not shown in commits), the implementation of this part was easier as std() is a built in function for panda series, where
   as total fluctuation is not. After some testing, I found this initial assumption was not true, and thus resorted to calculating fluctuation 
   itself, which is a little more inefficient than std. If I had more time, I would research if there is a more efficient way to calculate total 
@@ -27,7 +28,7 @@ so it was nice to revisist some of the tech.
   
 ## Part 3 getStationWithMostFluctuationTimeBound
   This was quite trivial after solving part 2 because part 3 can be broken down into a part 2 problem. After I filtered out the data in the dataframe
-  that was not in the bounds of the time, I could just then call getStationWithMostFluctuation with my edited dataframe, as all the readings in this 
+  that was not in the bounds of the time passed, I could just then call getStationWithMostFluctuation with my edited dataframe, as all the readings in this 
   dataframe are within the correct time bounds.
   
 ## Testing
@@ -37,6 +38,6 @@ so it was nice to revisist some of the tech.
   also happens if the data is not sorted by time does the calculations around fluctuation change?
   
 ## Final Thoughts 
-  To be honest, my pandas skills is not my forte. My experience with working with these technologies was only during my time as a Machine Learning
-  Engineer at Nordstrom. My python experiences are a lot more oriented around creating clients to test services, and making and handling api calls. 
+  My experience with working with these technologies was only during my time as a Machine Learning Engineer at Nordstrom, so it was a pleasure revisiting
+  pandas and numpy. My python experiences are a lot more oriented around creating clients to test services, and making and handling api calls. 
   Regardless, I hope my work here was enough to get me to the next round, and if not thank you for reading this far :)
