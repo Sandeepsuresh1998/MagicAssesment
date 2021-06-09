@@ -1,6 +1,20 @@
 import pandas as pd
 import numpy as np
 
+def readZipDataset(filename: str) -> pd.DataFrame :
+    with zipfile.ZipFile(filename,"r") as zip_ref:
+        zip_ref.extractall("data/")
+        df = pd.read_csv('data/data.csv')
+        # didn't have time to extend this to any zipfile
+        return df
+
+def readDataset(filename: str) -> pd.DataFrame :        
+    df = pd.read_csv(filename) 
+    return df
+    # Note found there was no missing values so no cleaning required
+    # no way to drop bad values while reading, so performance slow down
+    # if needed though just add: df.dropna(inplace=true) 
+    
 def readDataset(filename: str) -> pd.DataFrame :
     df = pd.read_csv(filename) 
     # Note found there was no missing values so no cleaning required
@@ -56,7 +70,7 @@ def output(lowestTempStation: object, stationWithMostFluctuation: int, stationWi
     print(lowestStationString + stationWithMostFluctuationString + stationTimeBoundFluctuationString) 
 
 def tests() :  
-    filename = 'data/test2.csv'
+    filename = 'data/test.csv'
     testDf = readDataset(filename)
 
     # Note test data is just some readings from stations 68 and 81
@@ -65,11 +79,12 @@ def tests() :
     # Part 1
     lowestTempStationObj = getMinimumTemperatureStation(testDf)
     assert(lowestTempStationObj['temperature_c'] == 5.4)
-    assert(lowestTempStationObj['station_id'] == 100)
+    assert(lowestTempStationObj['station_id'] == 68)
 
     # Part 2
+    # Changed one value in 81 to 5000 
     mostFluctuationStation = getStationWithMostFluctuation(testDf)
-    assert(mostFluctuationStation == 100)
+    assert(mostFluctuationStation == 81)
 
     # Part 3
     # Has only select data with some dates out of bound
@@ -77,13 +92,15 @@ def tests() :
     timeBoundStation = getStationWithMostFluctuationTimeBound(testDf, 2000.001, 2001.000)
     assert(timeBoundStation == 68)
 
+    print("All tests passed")
+
 
 def main() :
    
-    # tests()
+    tests()
     
     # Read raw data
-    filename = 'data/data.csv'
+    filename = 'data/data.csv.zip'
     rawDf = readDataset(filename)
 
     # Part 1
