@@ -97,7 +97,7 @@ def tests() :
 
 def main() :
    
-    tests()
+    # tests()
     
     # Read raw data
     filename = 'data/data.csv.zip'
@@ -106,7 +106,7 @@ def main() :
     # Part 1
     lowestTempStation = getMinimumTemperatureStation(rawDf)
 
-    # # Part 2
+    # Part 2
     mostFluctuationStation = getStationWithMostFluctuation(rawDf)
 
     # Part 3
