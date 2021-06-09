@@ -10,7 +10,7 @@ so it was nice to revisist some of the tech.
 
 ## General Thoughts
   I knew my biggest bottleneck was reading in the data from the zip file. As a result, I only read it once and stored it in the dataframe. 
-  I wanted to modularize the code as much as possible for readabiltly purposes and to limit rewriting of code. As seen in part 3, part 3 
+  I wanted to modularize the code as much as possible for readability purposes and to limit rewriting of code. As seen in part 3, part 3 
   can be broken down to a part 2 problem, after you filter out readings that are not in the time bounds. Similarly, if part 1 was also asked
   to have a time bound constraint, I could filter out the dates similarly and pass that dataframe into getMinimumTemperatureStation()
 
