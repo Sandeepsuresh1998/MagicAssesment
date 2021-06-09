@@ -3,7 +3,9 @@
 First and foremost, thank you so much for the opporunity to take this challenge. I hadn't used pandas and numpy since my time at Nordstrom, 
 so it was nice to revisist some of the tech. 
 
-#How I thought about it
+# Important Notes about Running
+  I put all of the libraries I needed in a requirements.txt, didn't want to upload my entire virtual environment. All the code is run in
+  readWeather.py using python3.7 So should be able to just run it with the given requirements with: python3 readWeather.py. Tests are commened out.
 
 ## General Thoughts
   I knew my biggest bottleneckwas reading in the data from the zip file. As a result, I only read it once and stored it in the dataframe. 
