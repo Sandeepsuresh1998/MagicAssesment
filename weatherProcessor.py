@@ -130,19 +130,16 @@ def get_fluctuation_for_station(temp_readings: List[float]) -> int:
         fluctuation += abs(curr-prev)
     return fluctuation
 
-def get_station_with_most_fluctuation(table: List[Reading], timeBound=False, startDate=None, endDate=None) -> int:
+def get_station_with_most_fluctuation(table: List[Reading]) -> int:
     """
     Main function that kicks off the different processes needed to find the 
     station with the most fluctuation
 
     Args:
         table (list): table for all csv data
-        timeBound (bool, optional): whether we are looking at time data. Defaults to False.
-        startDate ([type], optional): time lower bound. Defaults to None.
-        endDate ([type], optional): time upper bound. Defaults to None.
 
     Returns:
-        int: [description]
+        int: retuns station id with the most fluctuation
     """
     station_map = group_by_station(table)
     return find_max_fluctuation_station(station_map)
