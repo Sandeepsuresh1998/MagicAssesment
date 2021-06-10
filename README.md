@@ -20,10 +20,10 @@ capabilities in python.
   I wanted my code to be extendable and robust, so that even if the data didn't present itself like it did now weatherprocessor.py would still work.
   In the data given, all the weather stations were already grouped together and sorted by time and as a result fluctuation can be done in one pass without
   much extra things to store. However, I wanted my code to work even if station readings were interweaved but still timesorted (as I felt a normal 
-  weather sensor would probably output data sequentially but come from a bunch of different stations at a time). Thus, I added a map that stores the 
-  previous values for each station to solve this. However, I recognize my solution can't be modularized much. Another version of my code is more readable,
-  as I extracted all the temp readings for each station then calculated fluctuation for each station then in a different function. This was cleaner and I 
-  think better design, but at the cost of performance as I pass through the temp multiple times.
+  weather sensor would probably output data sequentially but come from a bunch of different stations at a time). However, I also thought, what happens
+  if the data is 10x the size that was given, so big that it all can't be read in at once. In this case it might better to have different workers that 
+  can calculate fluctuation for a station as the data for the station is read in. My original version of code was designed like this and more modularized
+  but I think for the size of the dataset given the current version of my code is more performant. Regardless that version of code I've attached here:
   https://github.com/Sandeepsuresh1998/MagicAssesment/blob/35bd014eea773ee38f638be8fe7568f33c873f6f/weatherProcessor.py
   
 ## Part 3 get_station_with_most_fluctuation_time_bound
