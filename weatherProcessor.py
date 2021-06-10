@@ -7,7 +7,8 @@ from pandas.core.tools import numeric
 # Named tuple for readability and rows
 Reading = namedtuple('Reading', 'id date temp')
 
-def read_zip_dataset() -> List[Reading]: 
+
+def read_zip_dataset() -> List[Reading]:
     """
     Reads zip file and extracts to data folder
 
@@ -18,24 +19,25 @@ def read_zip_dataset() -> List[Reading]:
         print("Unzipping data.csv.zip")
         zip.extractall('data/')
         return read_dataset('data/data.csv')
-    
 
-def read_dataset(filename: str) -> List[Reading]:     
+
+def read_dataset(filename: str) -> List[Reading]:
     """
-        Reads a csv file into namedTuples called Reading 
+        Reads a csv file into namedTuples called Reading
     Args:
         filename (str): path to csv file
 
     Returns:
         List[Reading]: All the readings from the csv file
     """
-    with open(filename) as csvfile :
+    with open(filename) as csvfile:
         csv_reader = reader(csvfile)
-        next(csv_reader) # Skip header
-        # Throw all readings into a list of named tuples, casted to correct types
-        list_of_rows = [Reading(int(row[0]), float(row[1]), float(row[2])) for row in list(csv_reader)]
+        next(csv_reader)  # Skip header
+        # Throw all readings into a list of named tuples, casted to types
+        rows = [Reading(int(row[0]), float(row[1]), float(row[2])) for row in list(csv_reader)]
         print("Finished reading in data from: " + filename)
-        return list_of_rows
+        return rows
+
 
 def get_minimum_temperature_station(table: List[Reading]) -> Dict:
     """
@@ -51,7 +53,7 @@ def get_minimum_temperature_station(table: List[Reading]) -> Dict:
     min_temp = float("inf")
     min_row = []
     for row in table :
-        if row.temp < min_temp :
+        if row.temp < min_temp:
             min_row = row
             min_temp = row.temp
     station_info = {
@@ -61,8 +63,9 @@ def get_minimum_temperature_station(table: List[Reading]) -> Dict:
 
     return station_info
 
-def group_by_station(table: list, start_date=None, end_date=None) -> Dict[int, List]: 
-    """ 
+
+def group_by_station(table: list, start_date=None, end_date=None) -> Dict[int, List]:
+    """
     Groups stations by its temp readings and has ability to filter 
     based on time bounds
 
@@ -179,7 +182,7 @@ def tests() -> None:
 
     # Part 1
     lowest_temp_station = get_minimum_temperature_station(test_table)
-    assert(round(lowest_temp_station['date'],3) == 2000.542), "Incorrect date for the station with the lowest temp!"
+    assert(round(lowest_temp_station['date'], 3) == 2000.542), "Incorrect date for the station with the lowest temp!"
     assert(lowest_temp_station['station_id'] == 68), "Incorrect station for lowest temp, should be"
 
     # Part 2
