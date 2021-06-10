@@ -22,8 +22,9 @@ capabilities in python.
   much extra things to store. However, I wanted my code to work even if station readings were interweaved but still timesorted (as I felt a normal 
   weather sensor would probably output data sequentially but come from a bunch of different stations at a time). Thus, I added a map that stores the 
   previous values for each station to solve this. However, I recognize my solution can't be modularized much. Another version of my code is more readable,
-  as I extracted all the temp readings for each station then calculated fluctuation for each station then in a different function. This was cleaner, but 
-  at the cost of performance as I pass through the data multiple times. 
+  as I extracted all the temp readings for each station then calculated fluctuation for each station then in a different function. This was cleaner and I 
+  think better design, but at the cost of performance as I pass through the temp multiple times.
+  https://github.com/Sandeepsuresh1998/MagicAssesment/blob/35bd014eea773ee38f638be8fe7568f33c873f6f/weatherProcessor.py
   
 ## Part 3 get_station_with_most_fluctuation_time_bound
   Part 3 relied heavily on part two. The filtering can be done in the second method, so this method really just does some error checking on the bounds,
