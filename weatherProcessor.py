@@ -71,7 +71,8 @@ def get_station_with_most_fluctuation(table: List[Reading], start_date=None, end
 
     Args:
         table (list): table for all csv data
-
+        start_date (float): lower time bound. Defaults to None.
+        end_date (float): upper time bound. Defaults to None.
     Returns:
         int: retuns station id with the most fluctuation
     """
