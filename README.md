@@ -1,43 +1,40 @@
 # MagicAssesment for Sandeep Suresh
 
-First and foremost, thank you so much for the opporunity to take this challenge. I hadn't used pandas and numpy since my time at Nordstrom, 
-so it was nice to revisist some of the tech. 
+First and foremost, thank you so much for the opporunity to redo this challenge without using pandas. I hope this new iteration can better highlight my 
+capabilities in python.
 
 # Important Notes about Running
   I put all of the libraries I needed in a requirements.txt, didn't want to upload my entire virtual environment. All the code is run in
   readWeather.py using python3.7. So should be able to just run it with the given requirements with: python3 readWeather.py, after repo 
   is cloned. Tests are commented out.
 
-## General Thoughts
-  I knew my biggest bottleneck was reading in the data from the zip file. As a result, I only read it once and stored it in the dataframe. 
-  I wanted to modularize the code as much as possible for readability purposes and to limit rewriting of code. As seen in part 3, part 3 
-  can be broken down to a part 2 problem, after you filter out readings that are not in the time bounds. Similarly, if part 1 was also asked
-  to have a time bound constraint, I could filter out the dates similarly and pass that dataframe into getMinimumTemperatureStation()
+## Reading in the Data
+  Instead of relying heavily on the pandas framework, I read the data in using the csv reader. For readability purposes, I also created a
+  namedTuple called Reading, and stored all the rows from the csv as such.
 
 ## Part 1 getMinimumTemperatureStation
-  This was pretty straightforward after I have read in the data to my dataframe. Pandas supports finding the index of the min value for a 
-  column, so I used that then created an object that stores the station id and the corresponding lowest temperature.
+  Can't really beat O(n) in terms of finding a min value in unsorted data, so algorithm was pretty straight foward. I go through the entire
+  list and compare temperatures, saving the row of the min temperature after a new miniumum is found. 
 
 ## Part 2 getStationWithMostFluctuation
-  This part was a little trickier, as originally I thought that "most fluctuation" would also mean "highest standard deviation." In an earlier
-  version of my code (not shown in commits), the implementation of this part was easier as std() is a built in function for panda series, where
-  as total fluctuation is not. After some testing, I found this initial assumption was not true, and thus resorted to calculating fluctuation 
-  itself, which is a little more inefficient than std. If I had more time, I would research if there is a more efficient way to calculate total 
-  fluctuation because right now I calculate the differences between temperatures, than convert them all to absolute values, then sum it up. More
-  research would allow me to understand if there was a way I could do this in less passes.
+  There were a couple assumptions I didn't want to make about the data that was true about the input data, but might not be true about other 
+  weather data in this format that guided how I created the algorithm for this part. With the current data, all the weather readings come in 
+  grouped by station, as in if you are reading top down, you will get all the readings for a particularlar station before reading another 
+  station's readings. As a result, you could compute fluctuation for each station by reading the entire csv _only_ once because you would know
+  you'd never get anymore readings from a station after you find a new station. I didn't make this assumption, so I grouped the temp readings by
+  station in a map and then for each station computated fluctuation. I did, however, make the assumption that the data would be time sorted because
+  an actual weather station would probably output readings sequentially. If this were not true, a sort by time would have to be done on all the temp
+  readings before calculating fluctuation.
   
 ## Part 3 getStationWithMostFluctuationTimeBound
-  This was quite trivial after solving part 2 because part 3 can be broken down into a part 2 problem. After I filtered out the data in the dataframe
-  that was not in the bounds of the time passed, I could just then call getStationWithMostFluctuation with my edited dataframe, as all the readings in this 
-  dataframe are within the correct time bounds.
+  Part 3 used the helper functions created by part 2. In the group_by_station function, there are default parameters that allow for filtering by
+  time. Once these bounds are checked in grouping the temperature readings, the problem because a part 2 problem and is passed to 
+  find_max_fluctuation_station.
   
 ## Testing
   This is the area that if I had more time I would rigorously test more. Right now, my code makes a lot of assumptions that the data that I read 
   will be correct and there are no 'gotchas'. For example, what if a row had a temperature reading that was actually a string? Or what if there
-  was any missing data in any column (note solution to this is trivial and is talked about in my code, just left out for performance reasons). What
-  also happens if the data is not sorted by time does the calculations around fluctuation change?
+  was any missing data in any columns.
   
 ## Final Thoughts 
-  My experience with working with these technologies was only during my time as a Machine Learning Engineer at Nordstrom, so it was a pleasure revisiting
-  pandas and numpy. My python experiences are a lot more oriented around creating clients to test services, and making and handling api calls. 
-  Regardless, I hope my work here was enough to get me to the next round, and if not thank you for reading this far :)
+  Thank you for the opp
