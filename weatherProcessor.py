@@ -1,14 +1,13 @@
-import pandas as pd
-import numpy as np
-import sys 
 from csv import reader
 from typing import List, Dict
 import zipfile
 from collections import namedtuple
+
+from pandas.core.tools import numeric
 # Named tuple for readability and rows
 Reading = namedtuple('Reading', 'id date temp')
 
-def readZipDataset() -> List: 
+def read_zip_dataset() -> List[Reading]: 
     """
     Reads zip file and extracts to data folder
 
@@ -18,10 +17,10 @@ def readZipDataset() -> List:
     with zipfile.ZipFile('data/data.csv.zip') as zip:
         print("Unzipping data.csv.zip")
         zip.extractall('data/')
-        return readDataset('data/data.csv')
+        return read_dataset('data/data.csv')
     
 
-def readDataset(filename: str) -> List[Reading]:     
+def read_dataset(filename: str) -> List[Reading]:     
     """
         Reads a csv file into namedTuples called Reading 
     Args:
@@ -38,7 +37,7 @@ def readDataset(filename: str) -> List[Reading]:
         print("Finished reading in data from: " + filename)
         return list_of_rows
 
-def get_minimum_temperature_station(table: List[Reading]) -> Dict[str]:
+def get_minimum_temperature_station(table: List[Reading]) -> Dict:
     """
     Gets the station with the lowest temperature reading
 
@@ -62,7 +61,7 @@ def get_minimum_temperature_station(table: List[Reading]) -> Dict[str]:
 
     return station_info
 
-def group_by_station(table: list, start_date=None, end_date=None) -> Dict[int]: 
+def group_by_station(table: list, start_date=None, end_date=None) -> Dict[int, List]: 
     """ 
     Groups stations by its temp readings and has ability to filter 
     based on time bounds
@@ -93,7 +92,7 @@ def group_by_station(table: list, start_date=None, end_date=None) -> Dict[int]:
 
     return station_map
 
-def find_max_fluctuation_station(station_map: Dict[int]) -> int:
+def find_max_fluctuation_station(station_map: Dict[int, List]) -> int:
     """
     Finds station with the most fluctuation
 
@@ -176,7 +175,7 @@ def get_station_with_most_fluctuation_time_bound(table: List[Reading], start_dat
 
 def tests() -> None:  
     filename = 'data/test.csv'
-    test_table = readDataset(filename)
+    test_table = read_dataset(filename)
 
     # Note test data is just some readings from stations 68 and 81
     # with some modificiations to individual values
@@ -204,10 +203,10 @@ def tests() -> None:
 
 def main() :
 
-    # tests()
+    tests()
 
     # Read raw data
-    table = readZipDataset()
+    table = read_zip_dataset()
     # Part 1
     lowest_temp_station = get_minimum_temperature_station(table)
     print("The station with the lowest temperature recording was {0} at {1}".format(lowest_temp_station["station_id"],round(lowest_temp_station["date"], 3)))
