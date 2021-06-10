@@ -30,6 +30,7 @@ def read_dataset(filename: str) -> List[Reading]:
     Returns:
         List[Reading]: All the readings from the csv file
     """
+    print("Starting to read: " + filename)
     with open(filename) as csvfile:
         csv_reader = reader(csvfile)
         next(csv_reader)  # Skip header
@@ -63,77 +64,7 @@ def get_minimum_temperature_station(table: List[Reading]) -> Dict:
 
     return station_info
 
-
-def group_by_station(table: list, start_date=None, end_date=None) -> Dict[int, List]:
-    """
-    Groups stations by its temp readings and has ability to filter 
-    based on time bounds
-
-    Args:
-        table (list): csv data
-        start_date ([type], optional): lower time bound. Defaults to None.
-        end_date ([type], optional): upper time bound. Defaults to None.
-
-    Returns:
-        dict: mapping between station id and corresponding temp readings
-    """
-    
-    # Time Bound handling
-    time_bound = False
-    if start_date is not None and end_date is not None :
-        time_bound = True
-
-    station_map = {}
-    for row in table :
-        if row.id in station_map :
-            # Continue if we are filtering with time and out of bounds
-            if time_bound and (row.date < start_date or row.date > end_date) :
-                continue
-            station_map[row.id].append(row.temp)
-        else :
-            station_map[row.id] = [row.temp]
-
-    return station_map
-
-def find_max_fluctuation_station(station_map: Dict[int, List]) -> int:
-    """
-    Finds station with the most fluctuation
-
-    Args:
-        station_map (dict): maps station id to all its temp readings
-
-    Returns:
-        int: station_id with most fluctuation
-    """
-    max_fluctuation = 0
-    max_station = 0
-    for station in station_map :
-        curr_fluctuation = get_fluctuation_for_station(station_map[station])
-        if curr_fluctuation >= max_fluctuation :
-            max_fluctuation = curr_fluctuation
-            max_station = station
-    return max_station
-        
-
-def get_fluctuation_for_station(temp_readings: List[float]) -> int:
-    """ 
-    Gets fluctuation for a specific station's readings
-    
-    Args:
-        temp_readings (List): temp readings for the station
-
-    Returns:
-        int: total fluctuation for the station
-    """
-    # Also works but less readable
-    # return sum([abs(curr-prev) for prev, curr in zip(temp_readings, temp_readings[1:])])
-
-    fluctuation = 0
-    for prev, curr in zip(temp_readings, temp_readings[1:]):
-        fluctuation += abs(curr-prev)
-    return fluctuation
-
-def get_station_with_most_fluctuation(table: List[Reading]) -> int:
+def get_station_with_most_fluctuation(table: List[Reading], start_date=None, end_date=None) -> int:
     """
     Main function that kicks off the different processes needed to find the 
     station with the most fluctuation
@@ -144,9 +75,34 @@ def get_station_with_most_fluctuation(table: List[Reading]) -> int:
     Returns:
         int: retuns station id with the most fluctuation
     """
-    station_map = group_by_station(table)
-    return find_max_fluctuation_station(station_map)
 
+    # Will still work if readings are not grouped by station, so long as time sorted
+
+    timeBound = False
+    if start_date is not None and end_date is not None:
+        timeBound = True
+
+    prev_val_map = {}
+    fluctuation_map = {}
+    max_fluctuation = 0
+    max_station = 0
+    for row in table :
+        if row.id in fluctuation_map:
+            # Check if within time bounds if necessary 
+            if timeBound and (row.date < start_date or row.date > end_date):
+                continue
+            # Update fluctuation for station and check if > max
+            fluctuation_map[row.id] += abs(row.temp - prev_val_map[row.id])
+            if fluctuation_map[row.id] > max_fluctuation:
+                max_station = row.id
+                max_fluctuation = fluctuation_map[row.id]
+        else:
+            fluctuation_map[row.id] = 0
+
+        # Always update prev value for station, assuming time sorted
+        prev_val_map[row.id] = row.temp
+
+    return max_station
 
 
 def get_station_with_most_fluctuation_time_bound(table: List[Reading], start_date: float, end_date: float) -> int: 
@@ -170,8 +126,8 @@ def get_station_with_most_fluctuation_time_bound(table: List[Reading], start_dat
         print("Error: Start date and end dates have to be floats")
         return -1
 
-    station_map = group_by_station(table, start_date, end_date)
-    return find_max_fluctuation_station(station_map)
+    return get_station_with_most_fluctuation(table, start_date, end_date)
+
 
 def tests() -> None:  
     filename = 'data/test.csv'
