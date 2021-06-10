@@ -2,20 +2,34 @@ import pandas as pd
 import numpy as np
 import sys 
 from csv import reader
-from typing import List, Type
+from typing import List, Dict
 import zipfile
 from collections import namedtuple
 # Named tuple for readability and rows
 Reading = namedtuple('Reading', 'id date temp')
 
-def readZipDataset() -> list: 
+def readZipDataset() -> List: 
+    """
+    Reads zip file and extracts to data folder
+
+    Returns:
+        List: All the readings from data/data.csv
+    """
     with zipfile.ZipFile('data/data.csv.zip') as zip:
         print("Unzipping data.csv.zip")
         zip.extractall('data/')
         return readDataset('data/data.csv')
     
 
-def readDataset(filename: str) -> list :     
+def readDataset(filename: str) -> List[Reading]:     
+    """
+        Reads a csv file into namedTuples called Reading 
+    Args:
+        filename (str): path to csv file
+
+    Returns:
+        List[Reading]: All the readings from the csv file
+    """
     with open(filename) as csvfile :
         csv_reader = reader(csvfile)
         next(csv_reader) # Skip header
@@ -24,9 +38,18 @@ def readDataset(filename: str) -> list :
         print("Finished reading in data from: " + filename)
         return list_of_rows
 
-def get_minimum_temperature_station(table: list) -> object:
+def get_minimum_temperature_station(table: List[Reading]) -> Dict[str]:
+    """
+    Gets the station with the lowest temperature reading
+
+    Args:
+        table (List[Reading]): csv data
+
+    Returns:
+        Dict[str]: map that has station_id and date of lowest temp reading
+    """
     # Go through entire temp column and return the min val O(n)
-    min_temp = sys.float_info.max
+    min_temp = float("inf")
     min_row = []
     for row in table :
         if row.temp < min_temp :
@@ -39,9 +62,10 @@ def get_minimum_temperature_station(table: list) -> object:
 
     return station_info
 
-def group_by_station(table: list, start_date=None, end_date=None) -> dict: 
-    """ Groups stations by its temp readings and has ability to filter 
-        based on time bounds
+def group_by_station(table: list, start_date=None, end_date=None) -> Dict[int]: 
+    """ 
+    Groups stations by its temp readings and has ability to filter 
+    based on time bounds
 
     Args:
         table (list): csv data
@@ -49,7 +73,7 @@ def group_by_station(table: list, start_date=None, end_date=None) -> dict:
         end_date ([type], optional): upper time bound. Defaults to None.
 
     Returns:
-        dict: mapping between station map and corresponding temp readings
+        dict: mapping between station id and corresponding temp readings
     """
     
     # Time Bound handling
@@ -69,8 +93,9 @@ def group_by_station(table: list, start_date=None, end_date=None) -> dict:
 
     return station_map
 
-def find_max_fluctuation_station(station_map: dict) -> int:
-    """Finds station with the most fluctuation
+def find_max_fluctuation_station(station_map: Dict[int]) -> int:
+    """
+    Finds station with the most fluctuation
 
     Args:
         station_map (dict): maps station id to all its temp readings
@@ -88,9 +113,10 @@ def find_max_fluctuation_station(station_map: dict) -> int:
     return max_station
         
 
-def get_fluctuation_for_station(temp_readings: list) -> int:
+def get_fluctuation_for_station(temp_readings: List[float]) -> int:
+    """ 
+    Gets fluctuation for a specific station's readings
     
-    """ Gets fluctuation for a specific station's readings
     Args:
         temp_readings (List): temp readings for the station
 
@@ -101,13 +127,14 @@ def get_fluctuation_for_station(temp_readings: list) -> int:
     # return sum([abs(curr-prev) for prev, curr in zip(temp_readings, temp_readings[1:])])
 
     fluctuation = 0
-    for prev, curr in zip(temp_readings, temp_readings[1:]) :
+    for prev, curr in zip(temp_readings, temp_readings[1:]):
         fluctuation += abs(curr-prev)
     return fluctuation
 
-def get_station_with_most_fluctuation(table: list, timeBound=False, startDate=None, endDate=None) -> int:
-    """Main function that kicks off the different processes needed to find the 
-       station with the most fluctuation
+def get_station_with_most_fluctuation(table: List[Reading], timeBound=False, startDate=None, endDate=None) -> int:
+    """
+    Main function that kicks off the different processes needed to find the 
+    station with the most fluctuation
 
     Args:
         table (list): table for all csv data
@@ -123,9 +150,10 @@ def get_station_with_most_fluctuation(table: list, timeBound=False, startDate=No
 
 
 
-def get_station_with_most_fluctuation_time_bound(table: list, start_date: float, end_date: float) -> int: 
-    """ Function that kicks off necessary processes to get station with most fluctuation with a 
-        given time bound
+def get_station_with_most_fluctuation_time_bound(table: List[Reading], start_date: float, end_date: float) -> int: 
+    """ 
+    Function that kicks off necessary processes to get station with most fluctuation with a 
+    given time bound
 
     Args:
         table (list): csv data
@@ -176,7 +204,7 @@ def tests() -> None:
 
 def main() :
 
-    tests()
+    # tests()
 
     # Read raw data
     table = readZipDataset()
