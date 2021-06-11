@@ -24,7 +24,7 @@ capabilities in python.
   if the data is 10x the size that was given, so big that it all can't be read in at once. In this case it might better to have different workers that 
   can calculate fluctuation for a station as the data for the station is read in. My original version of code was designed like this and more modularized
   but I think for the size of the dataset given the current version of my code is more performant. Regardless that version of code I've attached here:
-  https://github.com/Sandeepsuresh1998/MagicAssesment/blob/35bd014eea773ee38f638be8fe7568f33c873f6f/weatherProcessor.py
+  https://github.com/Sandeepsuresh1998/MagicAssesment/blob/35bd014eea773ee38f638be8fe7568f33c873f6f/weatherProcessor.py#L67
   
 ## Part 3 get_station_with_most_fluctuation_time_bound
   Part 3 relied heavily on part two. The filtering can be done in the second method, so this method really just does some error checking on the bounds,
